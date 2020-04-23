@@ -1,5 +1,6 @@
 import re, collections
 from lxml import etree
+import re
 
 
 #  change tree in URL ???
@@ -51,6 +52,7 @@ def make_killer_list():
 
 killer_list = make_killer_list()
 
+
 def get_text_between_brackets(beginning, txt):
     if beginning not in txt:
         print("Text not found")
@@ -78,70 +80,107 @@ def get_text_between_brackets(beginning, txt):
 def get_text_before_see_also(txt, indice_debut):
     if '==See also==' in txt[indice_debut:]:
         indice_fin = txt.index('==See also==')
+    elif '== See also ==' in txt[indice_debut:]:
+        indice_fin = txt.index('== See also ==')
     elif '==Notes==' in txt[indice_debut:]:
         indice_fin = txt.index('==Notes==')
+    elif '== Notes ==' in txt[indice_debut:]:
+        indice_fin = txt.index('== Notes ==')
     elif '==References==' in txt[indice_debut:]:
         indice_fin = txt.index('==References==')
+    elif '== References ==' in txt[indice_debut:]:
+        indice_fin = txt.index('== References ==')
     elif '==External links==' in txt[indice_debut:]:
         indice_fin = txt.index('==External links==')
+    elif '== External links ==' in txt[indice_debut:]:
+        indice_fin = txt.index('== External links ==')
     else:
         indice_fin = -1
     if indice_fin > -1:
         return indice_debut, indice_fin
     else:
-        return (0, 0)
-
-
+        return (indice_debut, -1)
 
 
 def get_usefull_text(txt):
     if '#REDIRECT' in txt:
-        print("Redirection link -> Remove killer from list\n")
+        #print("Redirection link -> Remove killer from list\n")
+        return "", ""
     elif 'Infobox serial killer' in txt:
-        print("Infobox Serial Killer")
+        #print("Infobox Serial Killer")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox serial killer", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        print(txt[infobox_begin:infobox_end])
-        print(txt[txt_begin:txt_end])
-        print('\n')
+        #print(txt[infobox_begin:infobox_end])
+        #print(txt[txt_begin:txt_end])
+        #print('\n')
     elif 'Infobox murderer' in txt:
-        print("Infobox Murderer")
+        #print("Infobox Murderer")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox murderer", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        print(txt[infobox_begin:infobox_end])
-        print(txt[txt_begin:txt_end])
-        print('\n')
+        #print(txt[infobox_begin:infobox_end])
+        #print(txt[txt_begin:txt_end])
+        #print('\n')
     elif 'Infobox person' in txt:
-        print("Infobox Person")
+        #print("Infobox Person")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox person", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        print(txt[infobox_begin:infobox_end])
-        print(txt[txt_begin:txt_end])
-        print('\n')
+        #print(txt[infobox_begin:infobox_end])
+        #print(txt[txt_begin:txt_end])
+        #print('\n')
     elif 'Infobox criminal' in txt:
-        print("Infobox Criminal")
+        #print("Infobox Criminal")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox criminal", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        print(txt[infobox_begin:infobox_end])
-        print(txt[txt_begin:txt_end])
-        print('\n')
+        #print(txt[infobox_begin:infobox_end])
+        #print(txt[txt_begin:txt_end])
+        #print('\n')
     elif 'Infobox officeholder' in txt:
-        print("Infobox Officeholder")
+        #print("Infobox Officeholder")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox officeholder", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        print(txt[infobox_begin:infobox_end])
-        print(txt[txt_begin:txt_end])
-        print('\n')
+        #print(txt[infobox_begin:infobox_end])
+        #print(txt[txt_begin:txt_end])
+        #print('\n')
     elif 'Infobox' in txt:
-        print("Other\n")
+        #print("Other\n")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        print(txt[infobox_begin:infobox_end])
-        print(txt[txt_begin:txt_end])
-        print('\n')
+        #print(txt[infobox_begin:infobox_end])
+        #print(txt[txt_begin:txt_end])
+        #print('\n')
     else:
-        print("No infobox\n")
+        (infobox_begin, infobox_end) = (0, 0)
+        (txt_begin, txt_end) = get_text_before_see_also(txt, 0)
+        #print("No infobox\n")
+        #print(txt[txt_begin:txt_end])
+        #print('\n')
+    return txt[infobox_begin:infobox_end], txt[txt_begin:txt_end]
+
+
+def remove_refs(txt):
+    return re.sub(r'ref.*?/ref', '', txt, flags=re.DOTALL)
+
+
+def remove_repeats(txt):  # Remplace [[A|B]] par A
+    return re.sub(r'\[\[(?P<name>.*?)\|.*?\]\]', r'\1', txt, flags=re.DOTALL)
+
+
+def remove_specials(txt):
+    txt = re.sub("\[|\]|\'", '', txt, flags=re.MULTILINE)
+    return txt
+
+
+def clean_text(txt):
+    text = remove_refs(txt)
+    text = remove_repeats(text)
+    text = remove_specials(text)
+    return text
 
 
 for killer in killer_list:
-    get_usefull_text(killer[1])
+    infobox, text = get_usefull_text(killer[1])
+    #print("Infobox:\n\n" + infobox + "\n\n\n")
+    #print(clean_text(text))
+    #print('\n\n\n')
+    
+
