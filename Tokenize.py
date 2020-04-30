@@ -1,10 +1,6 @@
 import nltk
-import numpy
 import spacy
-from spacy import displacy
-import re
-from nltk.corpus import wordnet as wn
-from nltk.stem import WordNetLemmatizer
+
 
 from Preprocessing import clean_text
 
@@ -108,15 +104,6 @@ def tokenize_in_sentences(txt):
     return tokens
 
 
-def is_usefull_sentence(sentence):
-    syn_murder = [w.lemma_names()[0] for w in wn.synsets(lemmatizer.lemmatize('murder'))]
-    tokens = nltk.word_tokenize(sentence)
-    for t in tokens:
-        if lemmatizer.lemmatize(t, pos="v") in syn_murder or lemmatizer.lemmatize(t, pos="n") in syn_murder:
-            print(t)
-            return True
-    return False
-
 
 def tokenize_and_tag(text, clean):
     # tokenize
@@ -126,7 +113,7 @@ def tokenize_and_tag(text, clean):
         tokens = [w for w in tokens if w not in stopwords]
     # tag
     tagged = nltk.pos_tag(tokens)
-    tagged.draw()
+    # tagged.draw()
     # result
     return tagged
 
@@ -151,9 +138,3 @@ def get_ne(sentence):
     print(neList)
     tree.draw()
     return neList
-
-
-sentences = tokenize_in_sentences(clean_text(text))
-
-
-tokenize_and_tag(sentences[0], False)

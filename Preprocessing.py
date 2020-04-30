@@ -1,4 +1,4 @@
-import re, collections
+import collections
 from lxml import etree
 import re
 
@@ -55,7 +55,7 @@ killer_list = make_killer_list()
 
 def get_text_between_brackets(beginning, txt):
     if beginning not in txt:
-        print("Text not found")
+        # print("Text not found")
         return (0, 0)
     else:
         index_beginning_txt = txt.index(beginning)
@@ -78,6 +78,7 @@ def get_text_between_brackets(beginning, txt):
 
 
 def get_text_before_see_also(txt, indice_debut):
+    indice_fin = -1
     if '==See also==' in txt[indice_debut:]:
         indice_fin = txt.index('==See also==')
     elif '== See also ==' in txt[indice_debut:]:
@@ -86,6 +87,8 @@ def get_text_before_see_also(txt, indice_debut):
         indice_fin = txt.index('==Notes==')
     elif '== Notes ==' in txt[indice_debut:]:
         indice_fin = txt.index('== Notes ==')
+    elif '== Literature ==' in txt[indice_debut:]:
+        indice_fin = txt.index('== Literature ==')
     elif '==References==' in txt[indice_debut:]:
         indice_fin = txt.index('==References==')
     elif '== References ==' in txt[indice_debut:]:
@@ -94,6 +97,8 @@ def get_text_before_see_also(txt, indice_debut):
         indice_fin = txt.index('==External links==')
     elif '== External links ==' in txt[indice_debut:]:
         indice_fin = txt.index('== External links ==')
+    elif '==Citations==' in txt[indice_debut:]:
+        indice_fin = txt.index('==Citations==')
     else:
         indice_fin = -1
     if indice_fin > -1:
@@ -104,83 +109,126 @@ def get_text_before_see_also(txt, indice_debut):
 
 def get_usefull_text(txt):
     if '#REDIRECT' in txt:
-        #print("Redirection link -> Remove killer from list\n")
+        # print("Redirection link -> Remove killer from list\n")
         return "", ""
     elif 'Infobox serial killer' in txt:
-        #print("Infobox Serial Killer")
+        # print("Infobox Serial Killer")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox serial killer", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        #print(txt[infobox_begin:infobox_end])
-        #print(txt[txt_begin:txt_end])
-        #print('\n')
+        # print(txt[infobox_begin:infobox_end])
+        # print(txt[txt_begin:txt_end])
+        # print('\n')
     elif 'Infobox murderer' in txt:
-        #print("Infobox Murderer")
+        # print("Infobox Murderer")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox murderer", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        #print(txt[infobox_begin:infobox_end])
-        #print(txt[txt_begin:txt_end])
-        #print('\n')
-    elif 'Infobox person' in txt:
-        #print("Infobox Person")
+        # print(txt[infobox_begin:infobox_end])
+        # print(txt[txt_begin:txt_end])
+        # print('\n')
+    elif 'Infobox person' in txt or 'Infobox Person' in txt:
+        # print("Infobox Person")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox person", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        #print(txt[infobox_begin:infobox_end])
-        #print(txt[txt_begin:txt_end])
-        #print('\n')
+        # print(txt[infobox_begin:infobox_end])
+        # print(txt[txt_begin:txt_end])
+        # print('\n')
     elif 'Infobox criminal' in txt:
-        #print("Infobox Criminal")
+        # print("Infobox Criminal")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox criminal", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        #print(txt[infobox_begin:infobox_end])
-        #print(txt[txt_begin:txt_end])
-        #print('\n')
+        # print(txt[infobox_begin:infobox_end])
+        # print(txt[txt_begin:txt_end])
+        # print('\n')
     elif 'Infobox officeholder' in txt:
-        #print("Infobox Officeholder")
+        # print("Infobox Officeholder")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox officeholder", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        #print(txt[infobox_begin:infobox_end])
-        #print(txt[txt_begin:txt_end])
-        #print('\n')
+        # print(txt[infobox_begin:infobox_end])
+        # print(txt[txt_begin:txt_end])
+        # print('\n')
     elif 'Infobox' in txt:
-        #print("Other\n")
+        # print("Other\n")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        #print(txt[infobox_begin:infobox_end])
-        #print(txt[txt_begin:txt_end])
-        #print('\n')
+        # print(txt[infobox_begin:infobox_end])
+        # print(txt[txt_begin:txt_end])
+        # print('\n')
     else:
         (infobox_begin, infobox_end) = (0, 0)
         (txt_begin, txt_end) = get_text_before_see_also(txt, 0)
-        #print("No infobox\n")
-        #print(txt[txt_begin:txt_end])
-        #print('\n')
+        # print("No infobox\n")
+        # print(txt[txt_begin:txt_end])
+        # print('\n')
     return txt[infobox_begin:infobox_end], txt[txt_begin:txt_end]
 
 
-def remove_refs(txt):
+def remove_refs(txt):  # Retire ref /ref et ce qu'il y a entre
     return re.sub(r'ref.*?/ref', '', txt, flags=re.DOTALL)
+
+
+def remove_ref_name(txt):  # Retire <ref name = ...>  (< = &lt; et > = &gt;)
+    txt = re.sub('&lt;ref name=.*?&gt;', '', txt, flags=re.MULTILINE)
+    return re.sub(r'<ref name=.*?>', '', txt, flags=re.MULTILINE)
+
+
+def remove_reflist(txt):
+    return re.sub(r'{{Reflist}}.*', '', txt, flags=re.MULTILINE)
+
+
+def remove_quotes(txt):
+    txt = re.sub(r'{{quote.*?}}', '', txt, flags=re.DOTALL)
+    return re.sub(r'{{Quote.*?}}', '', txt, flags=re.DOTALL)
+
+
+def remove_see_also(txt):
+    return re.sub(r'{{See also.*?}}', '', txt, flags=re.DOTALL)
+
+
+def remove_files(txt):
+    return re.sub(r'File:.*?.jpg.*?\n', '', txt, flags=re.DOTALL)
+
+
+def remove_star_list(txt):
+    return re.sub(r'<\*.*?\n>*', '', txt, flags=re.DOTALL)
 
 
 def remove_repeats(txt):  # Remplace [[A|B]] par A
     return re.sub(r'\[\[(?P<name>.*?)\|.*?\]\]', r'\1', txt, flags=re.DOTALL)
 
 
+def remove_brackets(txt):
+    return re.sub(r'{{(?P<name>.*?)}}', r'\1', txt, flags=re.DOTALL)
+
+
 def remove_specials(txt):
-    txt = re.sub("\[|\]|\'", '', txt, flags=re.MULTILINE)
+    txt = re.sub("\[|\]|<>|<|>|\'+|&nbsp;|&lt;|&gt;", '', txt, flags=re.MULTILINE)
+    return txt
+
+
+def remove_titels(txt):
+    txt = re.sub(r'==*.*?==*', '', txt, flags=re.DOTALL)
     return txt
 
 
 def clean_text(txt):
     text = remove_refs(txt)
+    text = remove_ref_name(text)
+    text = remove_reflist(text)
+    text = remove_quotes(text)
+    text = remove_see_also(text)
+    text = remove_files(text)
+    text = remove_star_list(text)
     text = remove_repeats(text)
+    text = remove_brackets(text)
     text = remove_specials(text)
+    # text = remove_titels(text)
     return text
 
 
+# print(clean_text('One time, to escape police arrest, Jesus Silva hid himself in the housing of a public telephone.&lt;ref name="chucky"/&gt; And sometimes was carried by a tall friend on the shoulder to fire with a sub-machine gun.&lt;ref name="chucky"/&gt;&lt;ref name="jesus silva"/&gt; On one occasion, during a police investigation in a morro in Salvador, several teams were attempting to capture a bandit. By radio, police officers communicated about the operation and the warning that the bandit walked off the morro. Jesus Silva had dribbled the police: When the police officers were discussing if the criminal had escaped, one of the officers said: "Only a dwarf has walked", one police officers responded: "The dwarf was the man!", but Jesus Silva had already escaped.&lt;ref name="chucky"/&gt;&lt;ref name="jesus silva"/&gt;'))
+
 for killer in killer_list:
     infobox, text = get_usefull_text(killer[1])
-    #print("Infobox:\n\n" + infobox + "\n\n\n")
-    #print(clean_text(text))
-    #print('\n\n\n')
-    
-
+    # print("Infobox:\n\n" + infobox + "\n\n\n")
+    # print(clean_text(text))
+    # print('\n\n\n')
