@@ -201,7 +201,7 @@ def remove_brackets(txt):
 
 
 def remove_specials(txt):
-    txt = re.sub("\[|\]|<>|<|>|\'+|&nbsp;|&lt;|&gt;", '', txt, flags=re.MULTILINE)
+    txt = re.sub("\[|\]|<>|<|>|\'+|&nbsp;|&lt;|&gt;|", '', txt, flags=re.MULTILINE)
     return txt
 
 

@@ -419,30 +419,38 @@ def analyse_precise_chunk(chunk):
                     victims.append(victim[1:])
                     # print(victims)
     if victims != [] and dates != []:
-        return victims, dates
+        return (victims[0], dates[0])
 
-
-all_text = get_text(True)
-#
-chunks = []
-for text in all_text:
-    print(text[0])
-    print()
-    # print('Victims')
-    # print(get_victims(text))
-    # print('Places')
-    # print(get_places(text))
-    # print('Dates')
-    # print(get_dates(text))
-
+def get_precise_infos(text):
     chunks = precise_process_content(text)
+    infos = []
     for chunk in chunks:
         # print(chunk)
-        print(analyse_precise_chunk(chunk))
-    #     analyse_chunk_quater(chunk)
-    #     # analyse_chunk_ter(chunk)
+        infos.append(analyse_precise_chunk(chunk))
+    return infos
 
-    print('****************************************')
+#
+# all_text = get_text(True)
+# #
+# chunks = []
+# for text in all_text:
+#     print(text[0])
+#     print()
+#     # print('Victims')
+#     # print(get_victims(text))
+#     # print('Places')
+#     # print(get_places(text))
+#     # print('Dates')
+#     # print(get_dates(text))
+#
+#     chunks = precise_process_content(text)
+#     for chunk in chunks:
+#         # print(chunk)
+#         print(analyse_precise_chunk(chunk))
+#     #     analyse_chunk_quater(chunk)
+#     #     # analyse_chunk_ter(chunk)
+#
+#     print('****************************************')
     # chunks = process_content(text)
 
 # tree = chunks[4]

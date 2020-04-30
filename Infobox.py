@@ -79,7 +79,7 @@ syn_endyear = [w.lemma_names()[0] for w in wn.synsets(lemmatizer.lemmatize('endy
 # print(syn_endyear)
 
 def trainee_infobox_kill(infobox):
-    enqueteur = [[], [], [], [], []]
+    enqueteur = [[], [], [], [], [], [], []] # nom du tueur, victimes, lieux, date début, date fin, [dates seules], (duo info: nom, date)
     txt = infobox.replace("|", "")
     tokens = txt.split("\n")[1:]
     # print(tokens)
@@ -115,15 +115,15 @@ def is_full(list):
     return True
 
 
-infoboxes = get_infobox(False)
-nb_full = 0
-for infobox in infoboxes:
-    print("***   " + infobox[0][0] + "   ***")
-    infos = trainee_infobox_kill(infobox[1])
-    if is_full(infos):
-        print(infos)
-        nb_full += 1
-print()
-print()
-print('***** Nombre de listes complètes: *****')
-print(nb_full)
+# infoboxes = get_infobox(False)
+# nb_full = 0
+# for infobox in infoboxes:
+#     print("***   " + infobox[0][0] + "   ***")
+#     infos = trainee_infobox_kill(infobox[1])
+#     if is_full(infos[:5]):
+#         print(infos)
+#         nb_full += 1
+# print()
+# print()
+# print('***** Nombre de listes complètes: *****')
+# print(nb_full)
