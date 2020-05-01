@@ -1,36 +1,75 @@
-from Infobox import get_infobox, is_full, trainee_infobox_kill
-from Text import get_text, get_victims, get_places, get_dates, get_precise_infos
+from Infobox import get_all_infobox, begin_research_infobox
+from Other import is_full, is_partly_completed
+from Text import get_all_text, get_victims, get_places, get_dates, get_precise_infos, get_text
 
-infoboxes = get_infobox(False) # nom du tueur, victimes, lieux, date début, date fin, [dates seules], (duo info: nom, date)
-all_text = get_text(True)
 
-nb_full = 0
+# Renvoie une liste contenant des listes d'informations sur les tueurs, les listes sont au format nom du tueur,
+# victimes, lieux, date début, date fin, [dates seules], (duo info: nom, date)
+def get_everyone():
+    infoboxes = get_all_infobox()
+    all_text = get_all_text(True)
 
-enqueteur = []
+    nb_full = 0
+    nb_partly_completed = 0
 
-for infobox in infoboxes:
-    infos = trainee_infobox_kill(infobox[1])
-    enqueteur.append(infos)
+    enqueteur = []
 
-for i, text in enumerate(all_text):
+    for infobox in infoboxes:
+        infos = begin_research_infobox(infobox[1])
+        enqueteur.append(infos)
+
+    for i, text in enumerate(all_text):
+        victims = get_victims(text)
+        places = get_places(text)
+        dates = get_dates(text)
+        infos = get_precise_infos(text)
+        if len(enqueteur[i][0]) == 0:
+            enqueteur[i][0].append(text[0])
+        if len(victims) > 0 and victims != None:
+            enqueteur[i][1].append(victims)
+        if len(places) > 0 and places != None:
+            enqueteur[i][2].append(places)
+        if len(dates) > 0 and dates != None:
+            enqueteur[i][5].append(dates)
+        if len(infos) > 0 and infos != None:
+            enqueteur[i][6].append(infos)
+        # if is_full(enqueteur[i][:5]):
+        #     nb_full += 1
+        # if is_partly_completed(enqueteur[i]):
+        #     nb_partly_completed += 1
+
+    for killer in enqueteur:
+        print(killer)
+
+    # print(nb_full)
+    # print(nb_partly_completed)
+
+    return enqueteur
+
+
+# Renvoie une liste contenant des informations sur un tueur (le n-ième du corpus), la liste est au format nom du
+# tueur, victimes, lieux, date début, date fin, [dates seules], (duo info: nom, date)
+def get_killer_number(killer_num):
+    infobox, text = get_text(killer_num, True)
+    # Infos de l'infobox
+    enqueteur = begin_research_infobox(infobox[1])
+    # Cherche les infos dans le texte
     victims = get_victims(text)
     places = get_places(text)
     dates = get_dates(text)
     infos = get_precise_infos(text)
-    if len(enqueteur[i][0]) == 0:
-        enqueteur[i][0].append(text[0])
-    if len(victims) > 0 and victims != None:
-        enqueteur[i][1].append(victims)
-    if len(places) > 0 and places != None:
-        enqueteur[i][2].append(places)
-    if len(dates) > 0 and dates != None:
-        enqueteur[i][5].append(dates)
-    if len(infos) > 0 and infos != None:
-        enqueteur[i][6].append(infos)
-    if is_full(enqueteur[i][4:]):
-        nb_full += 1
-
-for killer in enqueteur:
-    print(killer)
+    # Range les infos dans l'enqueteur
+    if len(enqueteur[0]) == 0:
+        enqueteur[0].append(text[0])
+    if len(victims) > 0 and victims is not None:
+        enqueteur[1].append(victims)
+    if len(places) > 0 and places is not None:
+        enqueteur[2].append(places)
+    if len(dates) > 0 and dates is not None:
+        enqueteur[5].append(dates)
+    if len(infos) > 0 and infos is not None:
+        enqueteur[6].append(infos)
+    return enqueteur
 
 
+get_everyone()

@@ -3,9 +3,7 @@ from lxml import etree
 import re
 
 
-#  change tree in URL ???
-
-#  remove namespace (http://www.mediawiki.org/xml/export-0.10/ by us), enables easy tree traversal
+#  nettoie l'arbre pour le rendre utilisable
 def strip_ns_prefix(tree):
     # xpath query for selecting all element nodes in namespace
     query = "descendant-or-self::*[namespace-uri()!='']"
@@ -16,7 +14,7 @@ def strip_ns_prefix(tree):
     return tree
 
 
-#  remove namespaces and display tags ef the tree
+#  nettoie l'arbre et affiche les tags de l'arbre
 def clean_and_display(tree, with_namespace, display):
     if not with_namespace:  # removes namespaces
         tree = strip_ns_prefix(tree)
@@ -36,6 +34,7 @@ def clean_and_display(tree, with_namespace, display):
                                              ', '.join(attribs) if len(attribs) > 0 else '-'))
 
 
+# crée une liste de tuples (nom, texte) où nom est le nom du tueur et texte l'enseble du texte de la page associée
 def make_killer_list():
     wiki_tree = etree.parse('Wikipedia_Corpus.xml')
     clean_and_display(wiki_tree, False, False)
@@ -53,9 +52,9 @@ def make_killer_list():
 killer_list = make_killer_list()
 
 
+# renvoie la position du texte (début, fin) contenu entre les accolades après beginning dans txt
 def get_text_between_brackets(beginning, txt):
     if beginning not in txt:
-        # print("Text not found")
         return (0, 0)
     else:
         index_beginning_txt = txt.index(beginning)
@@ -77,6 +76,7 @@ def get_text_between_brackets(beginning, txt):
     return i_min, i_max
 
 
+# renvoie la position du texte (début, fin) utile, i.e. avant les notes/informations en bas de page
 def get_text_before_see_also(txt, indice_debut):
     indice_fin = -1
     if '==See also==' in txt[indice_debut:]:
@@ -104,61 +104,34 @@ def get_text_before_see_also(txt, indice_debut):
     if indice_fin > -1:
         return indice_debut, indice_fin
     else:
-        return (indice_debut, -1)
+        return indice_debut, -1
 
 
+# renvoie le tuple (infobox, texte) correspondant à txt, texte est le texte utile à l'enquêteur
 def get_usefull_text(txt):
     if '#REDIRECT' in txt:
-        # print("Redirection link -> Remove killer from list\n")
         return "", ""
     elif 'Infobox serial killer' in txt:
-        # print("Infobox Serial Killer")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox serial killer", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        # print(txt[infobox_begin:infobox_end])
-        # print(txt[txt_begin:txt_end])
-        # print('\n')
     elif 'Infobox murderer' in txt:
-        # print("Infobox Murderer")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox murderer", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        # print(txt[infobox_begin:infobox_end])
-        # print(txt[txt_begin:txt_end])
-        # print('\n')
     elif 'Infobox person' in txt or 'Infobox Person' in txt:
-        # print("Infobox Person")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox person", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        # print(txt[infobox_begin:infobox_end])
-        # print(txt[txt_begin:txt_end])
-        # print('\n')
     elif 'Infobox criminal' in txt:
-        # print("Infobox Criminal")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox criminal", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        # print(txt[infobox_begin:infobox_end])
-        # print(txt[txt_begin:txt_end])
-        # print('\n')
     elif 'Infobox officeholder' in txt:
-        # print("Infobox Officeholder")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox officeholder", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        # print(txt[infobox_begin:infobox_end])
-        # print(txt[txt_begin:txt_end])
-        # print('\n')
     elif 'Infobox' in txt:
-        # print("Other\n")
         (infobox_begin, infobox_end) = get_text_between_brackets("Infobox", txt)
         (txt_begin, txt_end) = get_text_before_see_also(txt, infobox_end + 1)
-        # print(txt[infobox_begin:infobox_end])
-        # print(txt[txt_begin:txt_end])
-        # print('\n')
     else:
         (infobox_begin, infobox_end) = (0, 0)
         (txt_begin, txt_end) = get_text_before_see_also(txt, 0)
-        # print("No infobox\n")
-        # print(txt[txt_begin:txt_end])
-        # print('\n')
     return txt[infobox_begin:infobox_end], txt[txt_begin:txt_end]
 
 
@@ -171,24 +144,24 @@ def remove_ref_name(txt):  # Retire <ref name = ...>  (< = &lt; et > = &gt;)
     return re.sub(r'<ref name=.*?>', '', txt, flags=re.MULTILINE)
 
 
-def remove_reflist(txt):
+def remove_reflist(txt):  # Retire {{Reflist}} et ce qu'il y a après
     return re.sub(r'{{Reflist}}.*', '', txt, flags=re.MULTILINE)
 
 
-def remove_quotes(txt):
+def remove_quotes(txt):  # Retire {{quote ...}
     txt = re.sub(r'{{quote.*?}}', '', txt, flags=re.DOTALL)
     return re.sub(r'{{Quote.*?}}', '', txt, flags=re.DOTALL)
 
 
-def remove_see_also(txt):
+def remove_see_also(txt):  # Retire {{See also ...?}}
     return re.sub(r'{{See also.*?}}', '', txt, flags=re.DOTALL)
 
 
-def remove_files(txt):
+def remove_files(txt):  # Retire File:.***.jpg.\n
     return re.sub(r'File:.*?.jpg.*?\n', '', txt, flags=re.DOTALL)
 
 
-def remove_star_list(txt):
+def remove_star_list(txt):  # Retire les listes de *
     return re.sub(r'<\*.*?\n>*', '', txt, flags=re.DOTALL)
 
 
@@ -196,21 +169,21 @@ def remove_repeats(txt):  # Remplace [[A|B]] par A
     return re.sub(r'\[\[(?P<name>.*?)\|.*?\]\]', r'\1', txt, flags=re.DOTALL)
 
 
-def remove_brackets(txt):
+def remove_brackets(txt):  # Remplace {{(?P<Texte>.*?)}} par Texte
     return re.sub(r'{{(?P<name>.*?)}}', r'\1', txt, flags=re.DOTALL)
 
 
-def remove_specials(txt):
+def remove_specials(txt):  # Retire des caractères spéciaux (&lt; = < et &gt; = >)
     txt = re.sub("\[|\]|<>|<|>|\'+|&nbsp;|&lt;|&gt;|", '', txt, flags=re.MULTILINE)
     return txt
 
 
-def remove_titels(txt):
+def remove_titels(txt):  # Retire les titres des différentes parties de la page
     txt = re.sub(r'==*.*?==*', '', txt, flags=re.DOTALL)
     return txt
 
 
-def clean_text(txt):
+def clean_text(txt):  # Nettoie le texte
     text = remove_refs(txt)
     text = remove_ref_name(text)
     text = remove_reflist(text)
@@ -221,14 +194,5 @@ def clean_text(txt):
     text = remove_repeats(text)
     text = remove_brackets(text)
     text = remove_specials(text)
-    # text = remove_titels(text)
+    text = remove_titels(text)
     return text
-
-
-# print(clean_text('One time, to escape police arrest, Jesus Silva hid himself in the housing of a public telephone.&lt;ref name="chucky"/&gt; And sometimes was carried by a tall friend on the shoulder to fire with a sub-machine gun.&lt;ref name="chucky"/&gt;&lt;ref name="jesus silva"/&gt; On one occasion, during a police investigation in a morro in Salvador, several teams were attempting to capture a bandit. By radio, police officers communicated about the operation and the warning that the bandit walked off the morro. Jesus Silva had dribbled the police: When the police officers were discussing if the criminal had escaped, one of the officers said: "Only a dwarf has walked", one police officers responded: "The dwarf was the man!", but Jesus Silva had already escaped.&lt;ref name="chucky"/&gt;&lt;ref name="jesus silva"/&gt;'))
-
-for killer in killer_list:
-    infobox, text = get_usefull_text(killer[1])
-    # print("Infobox:\n\n" + infobox + "\n\n\n")
-    # print(clean_text(text))
-    # print('\n\n\n')
