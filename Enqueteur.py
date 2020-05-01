@@ -33,16 +33,16 @@ def get_everyone():
             enqueteur[i][5].append(dates)
         if len(infos) > 0 and infos != None:
             enqueteur[i][6].append(infos)
-        # if is_full(enqueteur[i][:5]):
-        #     nb_full += 1
-        # if is_partly_completed(enqueteur[i]):
-        #     nb_partly_completed += 1
+        if is_full(enqueteur[i][:5]):
+            nb_full += 1
+        if is_partly_completed(enqueteur[i]):
+            nb_partly_completed += 1
 
     for killer in enqueteur:
         print(killer)
 
-    # print(nb_full)
-    # print(nb_partly_completed)
+    print(nb_full)
+    print(nb_partly_completed)
 
     return enqueteur
 

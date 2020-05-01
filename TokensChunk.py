@@ -23,7 +23,7 @@ def process_content(text):
             tagged = nltk.pos_tag(words)
             ne = nltk.ne_chunk(tagged, binary=False)
 
-            chunk_gram = r"""Chunk: {<IN>*?<NNP>*?<VB.?|NN|NNP|DT>+<IN>*?<...?.?>*?<NNP|CD>+<NN>*?}"""
+            chunk_gram = r"""Chunk: {<VB.?|NN|NNP|DT>+<IN>*?<...?.?>*?<NNP|CD>+<NN>*?}"""
 
             chunk_parser = nltk.RegexpParser(chunk_gram)
             chunked = chunk_parser.parse(tagged)

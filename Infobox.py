@@ -59,7 +59,7 @@ def begin_research_infobox(infobox):
             if info[1] != "" and info[1] != " " and info[1 != "\n"]:
                 info[0] = info[0].strip()
                 info[1] = info[1].strip()
-                infos.append((info))
+                infos.append(info)
     for info in infos:
         if info[0] in syn_name:
             enqueteur[0].append(clean_info(info[1]))
