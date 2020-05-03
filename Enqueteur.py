@@ -107,7 +107,21 @@ def get_one_killer():
     killer = get_killer_number(int(num))
     show_killer_infos(killer)
 
-get_everyone()
-get_one_killer()
+
+def choose_function():
+    print("Vous pouvez :"
+       "\n 1. Consulter la liste exhaustive de tous les tueurs"
+       "\n 2. Rechercherez directement le tueur que vous souhaitez à l'aide de son numéro")
+    num = input()
+    if int(num) == 1:
+        get_everyone()
+    elif int(num) == 2:
+        get_one_killer()
+    else:
+        print("Désolé le numéro composé n'est pas attribué")
+
+
+choose_function()
+
 
 
