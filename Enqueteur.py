@@ -39,7 +39,7 @@ def get_everyone():
             nb_partly_completed += 1
 
     for killer in enqueteur:
-        print(killer)
+        print("Assassin:", killer[0], "\n Victimes:", killer[1], "\n Lieux des crimes:", killer[2], "\n dates de début et fin:", killer[3], killer[4], "\n Autres infos:", killer[6])
 
     print(nb_full)
     print(nb_partly_completed)
