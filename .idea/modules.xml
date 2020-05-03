@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Code.iml" filepath="$PROJECT_DIR$/.idea/Code.iml" />
+      <module fileurl="file://$USER_HOME$/Desktop/nltk-3.5/.idea/nltk-3.5.iml" filepath="$USER_HOME$/Desktop/nltk-3.5/.idea/nltk-3.5.iml" />
     </modules>
   </component>
 </project>

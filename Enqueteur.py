@@ -104,6 +104,9 @@ def get_one_killer():
        "\n Ceux-ci sont numérotés de 0 à 57, "
        "\n Veuillez entrez le numéro du tueur dont vous désirez connaître les caractéristiques")
     num = input()
+    if num > 57 or 0 > num:
+        print("Veuillez entrer un numéro entre 0 et 57")
+        get_one_killer()
     killer = get_killer_number(int(num))
     show_killer_infos(killer)
 
@@ -119,6 +122,8 @@ def choose_function():
         get_one_killer()
     else:
         print("Désolé le numéro composé n'est pas attribué")
+        choose_function()
+
 
 
 choose_function()
