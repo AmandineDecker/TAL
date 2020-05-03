@@ -98,4 +98,16 @@ def show_killer_infos(killer):
     print("Assassin:", assassin, "\n Victimes:", victime, "\n Lieux des crimes:", lieux, "\n dates de début et fin:",
           dateDeb, " à ", dateFin, "\n Autres infos:", infos)
 
+
+def get_one_killer():
+    print("Vous avez choisi de consulter le profil d'un seul tueur ! "
+       "\n Ceux-ci sont numérotés de 0 à 57, "
+       "\n Veuillez entrez le numéro du tueur dont vous désirez connaître les caractéristiques")
+    num = input()
+    killer = get_killer_number(int(num))
+    show_killer_infos(killer)
+
 get_everyone()
+get_one_killer()
+
+
