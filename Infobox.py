@@ -1,14 +1,9 @@
-import re
-
 from Preprocessing import make_killer_list, get_usefull_text
 from nltk.corpus import wordnet as wn
-from nltk.stem import WordNetLemmatizer
-
+from nltk.stem i
 
 # Récupère le texte du corpus
 killer_list = make_killer_list()
-
-
 
 
 # Nettoie les informations
@@ -43,7 +38,7 @@ syn_place = [w.lemma_names()[0] for w in
                 'states']
 
 
-# Renvoie une liste d'informations sur le tueur, les informations sont cherchées dans l'es i'nfobox
+# Renvoie une liste d'informations sur le tueur, les informations sont cherchées dans les infobox
 def begin_research_infobox(infobox):
     enqueteur = [[], [], [], [], [], [],
                  []]  # nom du tueur, victimes, lieux, date début, date fin, [dates seules], (duo info: nom, date)

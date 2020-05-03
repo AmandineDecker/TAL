@@ -35,7 +35,7 @@ def process_content(text):
     return chunks
 
 
-# Analyse un chunk, s'il contient un synonyme du verbe tuer suivi d'une entité nommée de type Person alors il la renvoie
+# Analyse un chunk, s'il contient un synonyme du verbe "tuer" suivi d'une entité nommée de type Person alors il la renvoie
 def analyse_chunk_person_verb(chunk):
     persons = []
     chunk_gram = r"""Verb: {<VB.?>}"""
@@ -59,7 +59,7 @@ def analyse_chunk_person_verb(chunk):
     return persons
 
 
-# Analyse un chunk, s'il contient un synonyme du nom meurtre suivi d'une entité nommée de type Person alors il la renvoie
+# Analyse un chunk, s'il contient un synonyme du nom "meurtre" suivi d'une entité nommée de type Person alors il la renvoie
 def analyse_chunk_person_noun(chunk):
     persons = []
     chunk_gram = r"""Murder: {<NN|NNS><IN>}"""
@@ -83,7 +83,7 @@ def analyse_chunk_person_noun(chunk):
     return persons
 
 
-# Analyse un chunk, s'il contient un synonyme du nom meurtre suivi d'une préposition puis d'une entité nommée de type
+# Analyse un chunk, s'il contient un synonyme du nom "meurtre" suivi d'une préposition puis d'une entité nommée de type
 # LOC ou GPE alors il la renvoie, en tant que lieux si la préposition est 'in', en tant que personne sinon
 def analyse_chunk_person_place(chunk):
     persons = []

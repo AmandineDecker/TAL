@@ -34,7 +34,7 @@ def clean_and_display(tree, with_namespace, display):
                                              ', '.join(attribs) if len(attribs) > 0 else '-'))
 
 
-# crée une liste de tuples (nom, texte) où nom est le nom du tueur et texte l'enseble du texte de la page associée
+# crée une liste de tuples (nom, texte) où nom est le nom du tueur et texte l'ensemble du texte de la page associée
 def make_killer_list():
     wiki_tree = etree.parse('Wikipedia_Corpus.xml')
     clean_and_display(wiki_tree, False, False)

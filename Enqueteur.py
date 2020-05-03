@@ -2,21 +2,15 @@ from Infobox import get_all_infobox, begin_research_infobox
 from Text import get_all_text, get_victims, get_places, get_dates, get_precise_infos, get_text
 
 
-# Renvoie une liste contenant des listes d'informations sur les tueurs, les listes sont au format nom du tueur,
-# victimes, lieux, date début, date fin, [dates seules], (duo info: nom, date)
+# Renvoie une liste contenant les listes d'informations sur les tueurs, les listes sont au format [nom du tueur,
+# victimes, lieux, date début, date fin, [dates seules], (duo info: nom, date)]
 def get_everyone():
     infoboxes = get_all_infobox()
     all_text = get_all_text(True)
-
-    nb_full = 0
-    nb_partly_completed = 0
-
     enqueteur = []
-
     for infobox in infoboxes:
         infos = begin_research_infobox(infobox[1])
         enqueteur.append(infos)
-
     for i, text in enumerate(all_text):
         victims = get_victims(text)
         places = get_places(text)
@@ -32,15 +26,15 @@ def get_everyone():
             enqueteur[i][5].append(dates)
         if len(infos) > 0 and infos != None:
             enqueteur[i][6].append(infos)
-
     for killer in enqueteur:
-       show_killer_infos(killer)
-
+        show_killer_infos(killer)
     return enqueteur
 
 
-# Renvoie une liste contenant des informations sur un tueur (le n-ième du corpus), la liste est au format nom du
-# tueur, victimes, lieux, date début, date fin, [dates seules], (duo info: nom, date)
+# Renvoie une liste contenant des informations sur un tueur (celui demandé par l'utilisateur), la liste est au format
+# [nom du tueur, victimes (nombre + noms si possible), lieux, date début, date fin, [dates seules],
+# (duo info: nom, date)]
+
 def get_killer_number(killer_num):
     infobox, text = get_text(killer_num, True)
     # Infos de l'infobox
@@ -64,7 +58,7 @@ def get_killer_number(killer_num):
     return enqueteur
 
 
-#Permet d'afficher les infos d'un assassin précis
+# Permet d'afficher les infos d'un assassin précis
 def show_killer_infos(killer):
     assassin = killer[0][0]
     if not (killer[1]):
@@ -87,13 +81,15 @@ def show_killer_infos(killer):
         infos = "Pas d'autres infos"
     else:
         infos = killer[6][0]
-    print("Assassin:", assassin, "\n Victimes:", victime, "\n Lieux des crimes:", lieux, "\n dates de début et fin:",
-          dateDeb, " à ", dateFin, "\n Autres infos:", infos)
+    print(
+        "Assassin:", assassin, "\n Victimes:", victime, "\n Lieux des crimes:", lieux, "\n Dates de début et fin: de ",
+        dateDeb, " à ", dateFin, "\n Autres infos:", infos)
 
-#Permet de choisir l'assassin que nous voulons étudier
+
+# Permet de choisir l'assassin que nous voulons étudier
 def get_one_killer():
     print("Vous avez choisi de consulter le profil d'un seul tueur ! "
-       "\n Ceux-ci sont numérotés de 0 à 57, veuillez entrer le numéro du tueur dont vous désirez connaître les caractéristiques")
+          "\n Ceux-ci sont numérotés de 0 à 57, veuillez entrer le numéro du tueur dont vous désirez connaître les informations.")
     num = input()
     if int(num) > 57 or 0 > int(num):
         print("Veuillez entrer un numéro entre 0 et 57")
@@ -101,18 +97,20 @@ def get_one_killer():
     killer = get_killer_number(int(num))
     show_killer_infos(killer)
 
-#Permet de choisir si on veut voir tous les assassins ou en choisir un précisement
+
+# Permet de choisir si on veut voir la liste contenant tous les assassins ou si l'on veut voir seulement les
+# informations concernant un seul assassin
 def choose_function():
     print("Bonjour monsieur l'inspecteur, que désirez-vous faire ? Je vous propose de :"
-       "\n 1. Consulter la liste exhaustive de tous les tueurs"
-       "\n 2. Rechercher directement le tueur que vous souhaitez à l'aide de son numéro")
+          "\n 1. Consulter la liste exhaustive de tous les tueurs."
+          "\n 2. Rechercher directement le tueur que vous souhaitez à l'aide de son numéro.")
     num = input()
     if int(num) == 1:
         get_everyone()
     elif int(num) == 2:
         get_one_killer()
     else:
-        print("Désolé le numéro composé n'est pas attribué")
+        print("Désolé le numéro composé n'est pas attribué.")
         choose_function()
 
 

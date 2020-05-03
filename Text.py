@@ -31,7 +31,7 @@ def get_text(number, clean):
         text = (killer, text)
     return (killer, infobox), text
 
-# Renvoie True si la phrase contient un synonyme du verbe tuer
+# Renvoie True si la phrase contient un synonyme du verbe "tuer"
 def is_sentence_with_verb_kill(sentence):
     lemmatizer = WordNetLemmatizer()
     syn_murder = [w.lemma_names()[0] for w in wn.synsets(lemmatizer.lemmatize('murder', pos="v"))]
@@ -42,7 +42,7 @@ def is_sentence_with_verb_kill(sentence):
     return False
 
 
-# Renvoie les phrases qui contiennent un synonyme du verbe tuer
+# Renvoie les phrases qui contiennent un synonyme du verbe "tuer"
 def get_usefull_sentences_verb(text):
     sentences = TokensChunk.tokenize_in_sentences(text[1])
     usefull_sentences = []
@@ -52,7 +52,7 @@ def get_usefull_sentences_verb(text):
     return usefull_sentences
 
 
-# Renvoie True si la phrase contient un synonyme du nom meurtre
+# Renvoie True si la phrase contient un synonyme du nom "meurtre"
 def is_sentence_with_noun_kill(sentence):
     lemmatizer = WordNetLemmatizer()
     syn_murder = [w.lemma_names()[0] for w in wn.synsets(lemmatizer.lemmatize('murder'))]
@@ -63,7 +63,7 @@ def is_sentence_with_noun_kill(sentence):
     return False
 
 
-# Renvoie les phrases qui contiennent un synonyme du nom meurtre
+# Renvoie les phrases qui contiennent un synonyme du nom "meurtre"
 def get_usefull_sentences_noun(text):
     sentences = TokensChunk.tokenize_in_sentences(text[1])
     usefull_sentences = []
@@ -73,7 +73,7 @@ def get_usefull_sentences_noun(text):
     return usefull_sentences
 
 
-# Renvoie un set contenant les victimes trouvées dans la partie liée au meurtre de text
+# Renvoie un set contenant les victimes trouvées dans la partie liée au meurtre dans text
 def get_victims(text):
     chunks = TokensChunk.process_content(text)
     victims = []
@@ -91,7 +91,7 @@ def get_victims(text):
     return clean_set(victims)
 
 
-# Renvoie un set contenant les lieux trouvés dans la partie liée au meurtre de text
+# Renvoie un set contenant les lieux trouvés dans la partie liée au meurtre dans text
 def get_places(text):
     chunks = TokensChunk.process_content(text)
     places = []
@@ -111,7 +111,7 @@ def get_dates(text):
     return clean_set(dates)
 
 
-# Renvoie une liste de tuples (victime, date) trouvés dans la partie liée au meurtre de text
+# Renvoie une liste de tuples (victime, date) trouvés dans la partie liée au meurtre dans text
 def get_precise_infos(text):
     chunks = TokensChunk.precise_process_content(text)
     infos = []
