@@ -8,19 +8,3 @@ def clean_set(set):
     for x in a_supprimer:
         set.remove(x)
     return set
-
-
-# Renvoie True si toutes les listes de la liste sont non vides
-def is_full(list):
-    for x in list:
-        if x == []:
-            return False
-    return True
-
-
-# Renvoie True si au moins une liste de la liste est non vide
-def is_partly_completed(list):
-    for x in list[1:]:
-        if x != []:
-            return True
-    return False
