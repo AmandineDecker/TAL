@@ -39,7 +39,29 @@ def get_everyone():
             nb_partly_completed += 1
 
     for killer in enqueteur:
-        print("Assassin:", killer[0], "\n Victimes:", killer[1], "\n Lieux des crimes:", killer[2], "\n dates de début et fin:", killer[3], killer[4], "\n Autres infos:", killer[6])
+        assassin = killer[0][0]
+        if not (killer[1]):
+            victime = "inconnu"
+        else:
+            victime = killer[1][0]
+        if not (killer[2]):
+            lieux = "inconnu"
+        else:
+            lieux = killer[2][0]
+        if not (killer[3]):
+            dateDeb = "inconnue"
+        else:
+            dateDeb = killer[3][0]
+        if not (killer[4]):
+            dateFin = "inconnue"
+        else:
+            dateFin = killer[4][0]
+        if not (killer[6]):
+            infos = "Pas d'autres infos"
+        else:
+            infos = killer[6][0]
+
+        print("Assassin:", assassin, "\n Victimes:", victime, "\n Lieux des crimes:", lieux, "\n dates de début et fin:", dateDeb," à ", dateFin, "\n Autres infos:", infos)
 
     print(nb_full)
     print(nb_partly_completed)
