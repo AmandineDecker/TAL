@@ -72,7 +72,7 @@ def get_killer_number(killer_num):
     return enqueteur
 
 
-
+#Permet d'afficher les infos d'un assassin précis
 def show_killer_infos(killer):
     assassin = killer[0][0]
     if not (killer[1]):
@@ -98,23 +98,23 @@ def show_killer_infos(killer):
     print("Assassin:", assassin, "\n Victimes:", victime, "\n Lieux des crimes:", lieux, "\n dates de début et fin:",
           dateDeb, " à ", dateFin, "\n Autres infos:", infos)
 
-
+#Permet de choisir l'assassin que nous voulons étudier
 def get_one_killer():
     print("Vous avez choisi de consulter le profil d'un seul tueur ! "
        "\n Ceux-ci sont numérotés de 0 à 57, "
        "\n Veuillez entrez le numéro du tueur dont vous désirez connaître les caractéristiques")
     num = input()
-    if num > 57 or 0 > num:
+    if int(num) > 57 or 0 > int(num):
         print("Veuillez entrer un numéro entre 0 et 57")
         get_one_killer()
     killer = get_killer_number(int(num))
     show_killer_infos(killer)
 
-
+#Permet de choisir si on veut voir tous les assassins ou en choisir un précisement
 def choose_function():
-    print("Vous pouvez :"
+    print("Bonjour Monsieur l'inspecteur. Que désirez-vous faire ? Je vous propose de :"
        "\n 1. Consulter la liste exhaustive de tous les tueurs"
-       "\n 2. Rechercherez directement le tueur que vous souhaitez à l'aide de son numéro")
+       "\n 2. Rechercher directement le tueur que vous souhaitez à l'aide de son numéro")
     num = input()
     if int(num) == 1:
         get_everyone()
@@ -124,9 +124,6 @@ def choose_function():
         print("Désolé le numéro composé n'est pas attribué")
         choose_function()
 
-
-
-choose_function()
 
 
 
