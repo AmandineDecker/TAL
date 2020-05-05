@@ -1,6 +1,8 @@
+from nltk import WordNetLemmatizer
 from Preprocessing import make_killer_list, get_usefull_text
 from nltk.corpus import wordnet as wn
-from nltk.stem i
+
+import re
 
 # Récupère le texte du corpus
 killer_list = make_killer_list()
