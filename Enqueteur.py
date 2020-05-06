@@ -64,11 +64,11 @@ def show_killer_infos(killer):
     if not (killer[1]):
         victime = "inconnu"
     else:
-        victime = killer[1][0]
+        victime = killer[1][0] if len(killer[1]) == 1 else killer[1]
     if not (killer[2]):
         lieux = "inconnu"
     else:
-        lieux = killer[2][0]
+        lieux = killer[2][0] if len(killer[2]) == 1 else killer[2]
     if not (killer[3]):
         dateDeb = "inconnue"
     else:
@@ -77,13 +77,17 @@ def show_killer_infos(killer):
         dateFin = "inconnue"
     else:
         dateFin = killer[4][0]
+    if not (killer[5]):
+        datesPrecises = "inconnues"
+    else:
+        datesPrecises = killer[5][0] if len(killer[5]) == 1 else killer[5]
     if not (killer[6]):
         infos = "Pas d'autres infos"
     else:
-        infos = killer[6][0]
+        infos = killer[6][0] if len(killer[6]) == 1 else killer[6]
     print(
         "Assassin:", assassin, "\n Victimes:", victime, "\n Lieux des crimes:", lieux, "\n Dates de début et fin: de ",
-        dateDeb, " à ", dateFin, "\n Autres infos:", infos)
+        dateDeb, " à ", dateFin, "\n Dates précises:", datesPrecises, "\n Autres infos:", infos)
 
 
 # Permet de choisir l'assassin que nous voulons étudier
